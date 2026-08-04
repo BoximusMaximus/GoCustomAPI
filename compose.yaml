@@ -15,9 +15,13 @@ services:
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: loz_db
+    volumes:
+      - loz_db:/var/lib/postgresql/18/docker
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+volumes:
+  loz_db:
