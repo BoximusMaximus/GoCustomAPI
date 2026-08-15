@@ -3,21 +3,28 @@ package main
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"fmt"
+	"reflect"
 )
 
+type album struct {
+    ID     string  `json:"id"`
+    Title  string  `json:"title"`
+    Artist string  `json:"artist"`
+    Price  float64 `json:"price"`
+}
+var albums = []album{
+    {ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
+    {ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
+    {ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
+}
+func GetAlbums (c *gin.Context){
+	c.IndentedJSON(http.StatusOK, albums)
+}
 func main(){
-	// create a Gin router with default middleware (logger and recovery)
-	r := gin.Default()
+	fmt.Println(reflect.TypeOf(albums))
+	router := gin.Default()
+	router.GET("/albums", GetAlbums)
 
-  r.GET("/ping", func(c *gin.Context) {
-    // Return JSON response
-    c.JSON(http.StatusOK, gin.H{
-      "message": "pong",
-    })
-  })
-  println("Listening on port 8080")
-  // Start server on port 8080 (default)
-  // Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
-  r.Run()
-
+	router.Run("localhost:8080")
 }	

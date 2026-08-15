@@ -1,8 +1,8 @@
-
 services:
 
   db:
     image: postgres
+    container_name: loz_db_container
     restart: always
     # set shared memory limit when using docker compose
     shm_size: 128mb
@@ -12,9 +12,9 @@ services:
     #    target: /dev/shm
     #    tmpfs:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: loz_db
+    env_file:
+      "./.env"
+      
     volumes:
       - loz_db:/var/lib/postgresql/18/docker
 
@@ -23,5 +23,9 @@ services:
     restart: always
     ports:
       - 8080:8080
-volumes:
-  loz_db:
+    depends_on: api
+  api:
+    build: ./backend/.
+    ports:
+      - 8081:8081
+    depends_on: db
