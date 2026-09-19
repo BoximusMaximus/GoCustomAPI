@@ -49,8 +49,8 @@ func main() {
 		AllowAllOrigins: true,
 		// End
 		// AllowOrigins: []string{"http://localhost:5173"},
-		AllowMethods: []string{"GET", "PUT", "POST", "DELETE"},
-		AllowHeaders: []string{"Origin"},
+		AllowMethods: []string{"GET", "PUT", "POST", "DELETE", "OPTIONS"},
+		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))
 	router.GET("/characters", GetCharacters)
 	router.POST("/characters", PostCharacters)

@@ -11,7 +11,6 @@ export default function ViewCharacters() {
         const response = await loz_api.get("/characters")
         console.log(response.data)
         setCharacters(response.data)
-        RenderCharacters()
     }
 
     function RenderCharacters(){
