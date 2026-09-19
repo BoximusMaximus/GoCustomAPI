@@ -10,11 +10,11 @@ export default function CharacterCard({characterName, characterGames, characterP
         <Card.Subtitle>
             Power Level: {characterPower}
         </Card.Subtitle>
-        <Card.Text>
-            <ul>
-                {characterGames.map((game) => <li>{game}</li>)}
-            </ul>
-        </Card.Text>
+
+        <ul>
+            {characterGames.map((game, key) => <li key={`${key}${game}`}>{game}</li>)}
+        </ul>
+
     </Card>
   )
 }
