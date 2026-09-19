@@ -43,9 +43,17 @@ func PostCharacters(c *gin.Context) {
 func main() {
 	fmt.Println(reflect.TypeOf(characters))
 	router := gin.Default()
+	router.Use(cors.New(cors.Config{
+		// temp for testing
+		// Start
+		AllowAllOrigins: true,
+		// End
+		// AllowOrigins: []string{"http://localhost:5173"},
+		AllowMethods: []string{"GET", "PUT", "POST", "DELETE"},
+		AllowHeaders: []string{"Origin"},
+	}))
 	router.GET("/characters", GetCharacters)
 	router.POST("/characters", PostCharacters)
-	router.Use(cors.Default())
 
 	router.Run(":8080")
 }
