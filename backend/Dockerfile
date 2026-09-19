@@ -1,12 +1,27 @@
-FROM golang:1.26
+# syntax=docker/dockerfile:1
 
-WORKDIR /usr/src/app
+FROM golang:1.26.5
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+# Set destination for COPY
+WORKDIR /app
+
+# Download Go modules
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+# Copy the source code. Note the slash at the end, as explained in
+# https://docs.docker.com/reference/dockerfile/#copy
+COPY . ./
 
-CMD ["app"]
+# Build
+RUN go build -o ./docker-go-backend
+
+# Optional:
+# To bind to a TCP port, runtime parameters must be supplied to the docker command.
+# But we can document in the Dockerfile what ports
+# the application is going to listen on by default.
+# https://docs.docker.com/reference/dockerfile/#expose
+EXPOSE 8080
+
+# Run
+CMD ["./docker-go-backend"]
