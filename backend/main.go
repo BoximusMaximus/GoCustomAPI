@@ -9,18 +9,7 @@ import (
 	"github.com/gin-contrib/cors"
 )
 
-type character struct {
-	ID    int16    `json:"id"`
-	Name  string   `json:"name"`
-	Games []string `json:"games"`
-	Power uint8    `json:"power"`
-}
 
-var characters = []character{
-	{ID: 1, Name: "Link", Games: []string{"Majoras Mask", "Twilight Princess", "Etc"}, Power: 56},
-	{ID: 2, Name: "Zelda", Games: []string{"Wind Waker", "Spirit Tracks"}, Power: 27},
-	{ID: 3, Name: "Ganon", Games: []string{"Ocarina Of Time", "Hyrule Warriors"}, Power: 48},
-}
 
 func GetCharacters(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, characters)
@@ -42,6 +31,7 @@ func PostCharacters(c *gin.Context) {
 }
 func main() {
 	fmt.Println(reflect.TypeOf(characters))
+	InitDb()
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		// temp for testing
