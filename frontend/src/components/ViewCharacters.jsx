@@ -18,8 +18,7 @@ export default function ViewCharacters() {
             <>
                 {characters.map((character) => <CharacterCard 
                     key={character.id} 
-                    characterName={character.name} 
-                    characterGames={character.games} 
+                    characterName={character.name}  
                     characterPower={character.power}/>)}
             </>
         )

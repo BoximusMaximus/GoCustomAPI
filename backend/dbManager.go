@@ -17,21 +17,27 @@ type character struct {
 }
 
 var characters = []character{
-	{ID: 1, Name: "Link", Games: []string{"Majoras Mask", "Twilight Princess", "Etc"}, Power: 56},
-	{ID: 2, Name: "Zelda", Games: []string{"Wind Waker", "Spirit Tracks"}, Power: 27},
-	{ID: 3, Name: "Ganon", Games: []string{"Ocarina Of Time", "Hyrule Warriors"}, Power: 48},
+	{ID: 1, Name: "Link", Power: 56},
+	{ID: 2, Name: "Zelda", Power: 27},
+	{ID: 3, Name: "Ganon", Power: 48},
 }
 
 func InitDb(){
 	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_URL"))
+	defer connection.Close()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	testCharacters := psql.NewModel(character{}, connection)
+	testCharacters, err := psql.NewModel(character{}, connection)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
 	for i := 0;i < len(characters);i++ {
+		fmt.Println("Inserting Character")
 		testCharacters.Insert(characters[i])
 	}
 	
