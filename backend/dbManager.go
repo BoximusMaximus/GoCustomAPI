@@ -24,13 +24,13 @@ var characters = []character{
 
 func InitDb(){
 	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_URL"))
-	defer connection.Close()
+	defer connection.Close(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	testCharacters, err := psql.NewModel(character{}, connection)
+	testCharacters := psql.NewModel(character{}, connection)
 		if err != nil {
 			fmt.Println(err)
 			return
