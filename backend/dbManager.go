@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"context"
 
 	"github.com/jackc/pgx/v5"
@@ -16,16 +17,24 @@ var characters = []character{
 	{ID: 1, Name: "Link", Power: 56},
 	{ID: 2, Name: "Zelda", Power: 27},
 	{ID: 3, Name: "Ganon", Power: 48},
+	{ID: 4, Name: "Midna", Power: 33},
 }
 
 func InitDb(connection *pgx.Conn){
-
-	sqlQuery := `CREATE TABLE characters (` +
-				`name varchar(80),` +
-				`power int` +
-				`);`
-
+	var sqlQuery string
+	sqlQuery = "CREATE TABLE characters (" +
+				"name varchar(80)," +
+				"power int" +
+				");"
 	connection.Exec(context.Background(), sqlQuery)
-	connection.Exec(context.Background(), `INSERT INTO characters VALUES ('Link', '56');`)
+	for i := 0; i < len(characters);i++{
+		sqlQuery = fmt.Sprintf("INSERT INTO characters VALUES ('%s', '%d');", characters[i].Name, characters[i].Power)
+		connection.Exec(context.Background(), sqlQuery)
+	}
+
+	
+
+	
+	
 }
 
