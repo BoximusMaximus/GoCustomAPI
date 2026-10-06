@@ -3,24 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"reflect"
+	"context"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/jackc/pgx/v5"
+
+
 )
 
-type character struct {
-	ID    int16    `json:"id"`
-	Name  string   `json:"name"`
-	Games []string `json:"games"`
-	Power uint8    `json:"power"`
-}
 
-var characters = []character{
-	{ID: 1, Name: "Link", Games: []string{"Majoras Mask", "Twilight Princess", "Etc"}, Power: 56},
-	{ID: 2, Name: "Zelda", Games: []string{"Wind Waker", "Spirit Tracks"}, Power: 27},
-	{ID: 3, Name: "Ganon", Games: []string{"Ocarina Of Time", "Hyrule Warriors"}, Power: 48},
-}
 
 func GetCharacters(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, characters)
@@ -41,14 +34,19 @@ func PostCharacters(c *gin.Context) {
 
 }
 func main() {
-	fmt.Println(reflect.TypeOf(characters))
+	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_URL"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer connection.Close(context.Background())
+	InitDb(connection)
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		// temp for testing
 		// Start
 		AllowAllOrigins: true,
 		// End
-		// AllowOrigins: []string{"http://localhost:5173"},
 		AllowMethods: []string{"GET", "PUT", "POST", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))

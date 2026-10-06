@@ -4,16 +4,20 @@ services:
     image: postgres
     container_name: loz_db_container
     shm_size: 128mb
+    ports:
+      - 5432:5432
     env_file:
       "./.env"
       
     volumes:
-      - loz_db:/var/lib/postgresql/data/
+      - loz_db:/var/lib/postgresql/
   api:
     container_name: go_api_container
     build: ./backend/.
     ports:
       - 8080:8080
+    env_file:
+      "./.env"
     depends_on: 
       - db
 volumes:

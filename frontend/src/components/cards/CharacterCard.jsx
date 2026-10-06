@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from "react-bootstrap/Card"
 
-export default function CharacterCard({characterName, characterGames, characterPower}) {
+export default function CharacterCard({characterName, characterPower}) {
   return (
     <Card>
         <Card.Header>

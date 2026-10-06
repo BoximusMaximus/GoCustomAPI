@@ -13,14 +13,10 @@ export default function CreateCharacter() {
         const formData = new FormData(form);
         const name = formData.get("name")
         const power = Number(formData.get("power"))
-        let games = []
-        for (let i = 0; i < gameCount; i++){
-            games.push(formData.get(`game${i}`))
-        }
+
         const newCharacter = {
             id: 10,
             name: name,
-            games: games,
             power: power
         }
         console.log(newCharacter)
@@ -35,22 +31,6 @@ export default function CreateCharacter() {
 
     }
 
-    function GamesInputController(){
-        let gameFields = []
-        for (let i = 0; i < gameCount; i++){
-            gameFields.push(
-                <Form.Group key={i}>
-                    <Form.Label>{`Character Game ${i + 1}`}</Form.Label>
-                    <Form.Control placeholder='Ocarina Of Time' name={`game${i}`}/>
-                </Form.Group>
-            )
-        }
-        return (
-            <>
-                {gameFields}
-            </>
-        )
-    }
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -62,7 +42,6 @@ export default function CreateCharacter() {
             <Form.Label>Character Power Level</Form.Label>
             <Form.Control placeholder='4' name='power'/>
         </Form.Group>
-        <GamesInputController/>
         <Button onClick={() => {setGameCount(gameCount - 1)}} disabled={gameCount == 1}>Remove Game</Button>
         <Button onClick={() => {setGameCount(gameCount + 1)}} disabled={gameCount == 5}>Add Game</Button>
         <Button variant="primary" type='submit'>Create Character</Button>
