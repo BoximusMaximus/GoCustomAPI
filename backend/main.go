@@ -3,10 +3,14 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"reflect"
+	"context"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/jackc/pgx/v5"
+
+
 )
 
 
@@ -30,15 +34,19 @@ func PostCharacters(c *gin.Context) {
 
 }
 func main() {
-	fmt.Println(reflect.TypeOf(characters))
-	InitDb()
+	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_URL"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer connection.Close(context.Background())
+	InitDb(connection)
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		// temp for testing
 		// Start
 		AllowAllOrigins: true,
 		// End
-		// AllowOrigins: []string{"http://localhost:5173"},
 		AllowMethods: []string{"GET", "PUT", "POST", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))

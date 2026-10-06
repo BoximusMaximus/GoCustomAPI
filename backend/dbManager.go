@@ -2,18 +2,14 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"os"
 
-	"github.com/gopsql/psql"
 	"github.com/jackc/pgx/v5"
 )
 
 type character struct {
 	ID    int16    `json:"id"`
 	Name  string   `json:"name"`
-	Games []string `json:"games"`
-	Power uint8    `json:"power"`
+	Power int    `json:"power"`
 }
 
 var characters = []character{
@@ -22,24 +18,14 @@ var characters = []character{
 	{ID: 3, Name: "Ganon", Power: 48},
 }
 
-func InitDb(){
-	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_URL"))
-	defer connection.Close(context.Background())
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+func InitDb(connection *pgx.Conn){
 
-	testCharacters := psql.NewModel(character{}, connection)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	sqlQuery := `CREATE TABLE characters (` +
+				`name varchar(80),` +
+				`power int` +
+				`);`
 
-	for i := 0;i < len(characters);i++ {
-		fmt.Println("Inserting Character")
-		testCharacters.Insert(characters[i])
-	}
-	
+	connection.Exec(context.Background(), sqlQuery)
+	connection.Exec(context.Background(), `INSERT INTO characters VALUES ('Link', '56');`)
 }
 
